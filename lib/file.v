@@ -42,7 +42,6 @@ fn (mut fp FileParser) parse_vdoc_group(vdoc_group string) {
 			break
 		}
 
-		ch := vdoc_group_format[k].ascii_str()
 		mut content := ''
 		k, content = fp.go_to_delimiter(k, vdoc_group_format, '@')
 		mut re_sanitize := regex.regex_opt(r'[\s]{2,}') or {
@@ -53,7 +52,7 @@ fn (mut fp FileParser) parse_vdoc_group(vdoc_group string) {
 		mut format_content := re_sanitize.replace(content, ' ').split('\n')
 		for block in format_content{
 			block_array := block.trim(' ').split(' ')
-			if(block_array.len == 1 && block_array[0].trim(' ') == '') {
+			if block_array.len == 1 && block_array[0].trim(' ') == '' {
 				continue
 			}
 			fp.file_vdoc_groups << block_array
