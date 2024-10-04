@@ -2,25 +2,58 @@ module main
 
 import os
 import lib
-
 fn create_parser() lib.FileParser {
 	return lib.FileParser{}
 }
 
+fn scan_path(path string, mut fp_array []lib.FileParser)[]lib.FileParser {
+	objects := os.ls(path) or {
+		print('"$path" is not a valid directory\n')
+		exit(0)
+	}
+
+	for obj in objects {
+		if os.is_dir('$path/$obj') {
+			if !os.is_dir_empty('$path/$obj') {
+				fp_array = scan_path('$path/$obj', mut fp_array)
+			}
+			continue
+		}
+		mut file := create_parser()
+		file.parse('$path/$obj')
+		fp_array << file
+	}
+	return fp_array
+}
+
 fn main() {
-	if os.args.len == 1 {
-		print('A destination path must be given as the first parameter\n')
+	mut app_args := lib.ImprovedArguments{}
+	app_args.parse()
+	f_args := app_args.get_map()
+	keys_f_args := f_args.keys()
+	mut fp_array := []lib.FileParser{}
+
+	if keys_f_args.contains('h') {
+		app_args.get_help()
 		exit(1)
 	}
 
-	path := os.abs_path(os.args[1])
-
-	objects := os.ls(path) or {
-		print('"$path" could not be accessed\n')
-		exit(0)
-	}
-	for obj in objects {
+	if keys_f_args.contains('d'){
+		path := os.abs_path(f_args['d'])
+		fp_array = scan_path(path, mut fp_array)
+	} else if keys_f_args.contains('f') {
+		path := os.abs_path(f_args['f'])
+		if !os.is_file(path) {
+			print('"$path" is not a file\n')
+			exit(1)
+		}
 		mut file := create_parser()
-		file.parse('$path/$obj')
+		file.parse(path)
+		fp_array << file
+	} else {
+		print('Scan mode must be specified\n')
+		exit(1)
 	}
+
+	print(fp_array)
 }

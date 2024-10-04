@@ -100,5 +100,4 @@ pub fn (mut fp FileParser) parse(path string) {
 	}
 	fp.file_body_length = fp.file_body.len
 	fp.extract_vdoc_groups()
-	print(fp.file_vdoc_groups)
 }
