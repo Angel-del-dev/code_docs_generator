@@ -4,7 +4,7 @@ import os
 import regex
 
 pub struct FileParser {
-	mut:
+	pub mut:
 		dir_path			string
 		file_path			string
 		file_name			string

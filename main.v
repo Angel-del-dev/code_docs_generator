@@ -42,6 +42,11 @@ fn main() {
 		exit(1)
 	}
 
+	if !keys_f_args.contains('t') {
+		print('The target argument (-t) must be specified\n')
+		exit(1)
+	}
+
 	if keys_f_args.contains('d'){
 		path := os.abs_path(f_args['d'])
 		fp_array = scan_path(path, mut fp_array, f_args['d'])
@@ -59,5 +64,28 @@ fn main() {
 		exit(1)
 	}
 
-	print(fp_array)
+	if !os.exists(f_args['t']) {
+
+		os.mkdir(f_args['t']) or {
+			print('Could not create folder '+f_args['t'])
+			exit(1)
+		}
+	}
+
+	for f in fp_array {
+		if !os.exists(f_args['t']+'/'+f.dir_path) {
+			os.mkdir(f_args['t']+'/'+f.dir_path) or {
+				print('Could not create folder '+f_args['t']+'/'+f.dir_path)
+				exit(1)
+			}
+		}
+		if !os.exists(f_args['t']+'/'+f.dir_path+'/'+f.file_name) {
+			os.write_file(f_args['t']+'/'+f.dir_path+'/'+f.file_name, '') or {
+				print('Could not create file '+f_args['t']+'/'+f.dir_path+'/'+f.file_name)
+				exit(1)
+			}
+		}
+		generator := lib.Generator{}
+		generator.generate(f)
+	}
 }

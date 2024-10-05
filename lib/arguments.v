@@ -34,7 +34,7 @@ pub fn (mut args ImprovedArguments) parse() {
 	args.default_args_string = args.default_args.join(' ')
 	args.default_args_character_len = args.default_args_string.len
 
-	value_followed_argument_array:= ['-d', '-f']
+	value_followed_argument_array:= ['-d', '-f', '-t']
 	mut i := 0
 	mut word := ''
 	for {
