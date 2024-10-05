@@ -70,8 +70,7 @@ pub fn (args ImprovedArguments) get_help() {
 		'h': 'Get list of all available arguments with its description',
 		'd': 'Specify the folder to scan',
 		'f': 'Specify the file to scan',
-		't': 'Target folder to create the documentation files',
-		'ot': 'Output type: [ md: Markdown, html: Hypertext Markup Language ]'
+		't': 'Target folder to create the documentation files'
 	}
 	print('Argument\t\tDescription\n')
 	print('-------------------------------------------------------------\n')

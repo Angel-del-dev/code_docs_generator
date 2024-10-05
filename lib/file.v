@@ -5,6 +5,7 @@ import regex
 
 pub struct FileParser {
 	mut:
+		dir_path			string
 		file_path			string
 		file_name			string
 		file_extension		string
@@ -86,7 +87,8 @@ fn (mut fp FileParser) extract_vdoc_groups() {
 	}
 }
 
-pub fn (mut fp FileParser) parse(path string) {
+pub fn (mut fp FileParser) parse(base_path string, path string) {
+	fp.dir_path = os.dir(path).split(base_path)[1]
 	fp.file_path = path
 	fp.file_body = os.read_file(path) or {
 		print('Could not open "$path"\n')

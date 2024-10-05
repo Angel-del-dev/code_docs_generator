@@ -2,11 +2,12 @@ module main
 
 import os
 import lib
+
 fn create_parser() lib.FileParser {
 	return lib.FileParser{}
 }
 
-fn scan_path(path string, mut fp_array []lib.FileParser)[]lib.FileParser {
+fn scan_path(path string, mut fp_array []lib.FileParser, dir string)[]lib.FileParser {
 	objects := os.ls(path) or {
 		print('"$path" is not a valid directory\n')
 		exit(0)
@@ -15,12 +16,15 @@ fn scan_path(path string, mut fp_array []lib.FileParser)[]lib.FileParser {
 	for obj in objects {
 		if os.is_dir('$path/$obj') {
 			if !os.is_dir_empty('$path/$obj') {
-				fp_array = scan_path('$path/$obj', mut fp_array)
+				fp_array = scan_path('$path/$obj', mut fp_array, dir)
 			}
 			continue
 		}
+		if obj[0].ascii_str() == '.' {
+			continue
+		}
 		mut file := create_parser()
-		file.parse('$path/$obj')
+		file.parse(dir, '$path/$obj')
 		fp_array << file
 	}
 	return fp_array
@@ -40,7 +44,7 @@ fn main() {
 
 	if keys_f_args.contains('d'){
 		path := os.abs_path(f_args['d'])
-		fp_array = scan_path(path, mut fp_array)
+		fp_array = scan_path(path, mut fp_array, f_args['d'])
 	} else if keys_f_args.contains('f') {
 		path := os.abs_path(f_args['f'])
 		if !os.is_file(path) {
@@ -48,7 +52,7 @@ fn main() {
 			exit(1)
 		}
 		mut file := create_parser()
-		file.parse(path)
+		file.parse(f_args['f'], path)
 		fp_array << file
 	} else {
 		print('Scan mode must be specified\n')
