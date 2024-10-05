@@ -1,5 +1,3 @@
 *.sh
 bin/*
 .idea/*
-examples/*
-generated/*

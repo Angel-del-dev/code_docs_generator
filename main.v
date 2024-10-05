@@ -47,6 +47,8 @@ fn main() {
 		exit(1)
 	}
 
+	print('Parsing files...\n')
+
 	if keys_f_args.contains('d'){
 		path := os.abs_path(f_args['d'])
 		fp_array = scan_path(path, mut fp_array, f_args['d'])
@@ -72,20 +74,26 @@ fn main() {
 		}
 	}
 
-	for f in fp_array {
+	print(fp_array.len.str()+' files parsed...\n')
+	print('Generating markup...\n')
+
+	for mut f in fp_array {
 		if !os.exists(f_args['t']+'/'+f.dir_path) {
 			os.mkdir(f_args['t']+'/'+f.dir_path) or {
 				print('Could not create folder '+f_args['t']+'/'+f.dir_path)
 				exit(1)
 			}
 		}
-		if !os.exists(f_args['t']+'/'+f.dir_path+'/'+f.file_name) {
-			os.write_file(f_args['t']+'/'+f.dir_path+'/'+f.file_name, '') or {
-				print('Could not create file '+f_args['t']+'/'+f.dir_path+'/'+f.file_name)
-				exit(1)
-			}
-		}
+
 		generator := lib.Generator{}
-		generator.generate(f)
+		contents := generator.generate(mut f)
+		f_name_no_extension := f.file_name.split('.')[0]
+		os.write_file(f_args['t']+'/'+f.dir_path+'/'+f_name_no_extension+'.md', contents) or {
+			print('Could not create file '+f_args['t']+'/'+f.dir_path+'/'+f_name_no_extension+'.md')
+			exit(1)
+		}
 	}
+
+	print('Markup generated...\n')
+	print('\nEnjoy\n')
 }
