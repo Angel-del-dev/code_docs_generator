@@ -8,6 +8,4 @@ Simple documentation generator from souce code written in vlang
 ```
 
 ## TODO
-* -t
-* -ot
-* Generate documentation files
+* Generate contents of target files
