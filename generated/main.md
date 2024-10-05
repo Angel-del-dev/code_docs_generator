@@ -1,6 +1,6 @@
-# Utils  
+# class Utils  
 this is a proper description  
-## Utils  
+## Utils is a php class  
 ## __construct  
 ```php __costruct():void```  
 ## do_syscall  

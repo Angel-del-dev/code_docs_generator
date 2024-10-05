@@ -1,7 +1,7 @@
 <?php
 /*
 #vdocs
-    @title Utils
+    @title class Utils
     @description this is
     a
     proper

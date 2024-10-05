@@ -12,14 +12,16 @@ pub fn (g Generator) generate(mut f FileParser) string {
 			'TITLE' {
 				mut title := ''
 				if group.len >= 2 {
-					title = group[1]
+					group.delete(0)
+					title = group.join(' ')
 				}
 				content += '# '+title
 			}
 			'SUBTITLE' {
 				mut subtitle := ''
 				if group.len >= 2 {
-					subtitle = group[1]
+					group.delete(0)
+					subtitle = group.join(' ')
 				}
 				content += '## '+subtitle
 			}
