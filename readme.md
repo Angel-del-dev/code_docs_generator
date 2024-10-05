@@ -6,6 +6,3 @@ Simple documentation generator from souce code written in vlang
 # use -h to display help
 ./application -h
 ```
-
-## TODO
-* Generate contents of target files
